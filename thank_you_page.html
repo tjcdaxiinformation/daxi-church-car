@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>感謝您的辛勞</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #fff9ad 0%, #ffcf71 100%);
+            font-family: "Microsoft JhengHei", sans-serif;
+            overflow: hidden;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 40px 30px;
+            border-radius: 30px;
+            box-shadow: 0 15px 35px rgba(224, 142, 0, 0.2);
+            text-align: center;
+            max-width: 80%;
+            border: 4px solid #ffffff;
+            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        h1 {
+            color: #d35400;
+            font-size: 24px;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        p {
+            color: #7f8c8d;
+            font-size: 16px;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            background: #f39c12;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn:active {
+            transform: scale(0.9);
+        }
+
+        /* 亮面活潑的裝飾點點 */
+        .dot {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- 裝飾背景 -->
+    <div class="dot" style="width: 100px; height: 100px; top: 10%; left: 5%;"></div>
+    <div class="dot" style="width: 80px; height: 80px; bottom: 15%; right: 10%;"></div>
+
+    <div class="card">
+        <span class="icon">✨</span>
+        <h1>感謝主！</h1>
+        <p>願您所做的一切辛勞<br>皆蒙主親自紀念。</p>
+        <a href="#" onclick="window.close(); return false;" class="btn">完成回報</a>
+    </div>
+
+    <script>
+        // 簡單的活潑背景裝飾生成
+        for(let i=0; i<15; i++) {
+            let dot = document.createElement('div');
+            dot.className = 'dot';
+            let size = Math.random() * 50 + 10;
+            dot.style.width = size + 'px';
+            dot.style.height = size + 'px';
+            dot.style.top = Math.random() * 100 + '%';
+            dot.style.left = Math.random() * 100 + '%';
+            document.body.appendChild(dot);
+        }
+    </script>
+</body>
+</html>
