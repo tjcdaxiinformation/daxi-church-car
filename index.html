@@ -1,106 +1,588 @@
+```html
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>感謝您的辛勞</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(135deg, #fff9ad 0%, #ffcf71 100%);
-            font-family: "Microsoft JhengHei", sans-serif;
-            overflow: hidden;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 40px 30px;
-            border-radius: 30px;
-            box-shadow: 0 15px 35px rgba(224, 142, 0, 0.2);
-            text-align: center;
-            max-width: 80%;
-            border: 4px solid #ffffff;
-            animation: popIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        @keyframes popIn {
-            0% { transform: scale(0.5); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-
-        .icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-            display: block;
-        }
-
-        h1 {
-            color: #d35400;
-            font-size: 24px;
-            margin-bottom: 15px;
-            line-height: 1.5;
-        }
-
-        p {
-            color: #7f8c8d;
-            font-size: 16px;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .btn {
-            background: #f39c12;
-            color: white;
-            padding: 12px 30px;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);
-            transition: transform 0.2s;
-        }
-
-        .btn:active {
-            transform: scale(0.9);
-        }
-
-        /* 亮面活潑的裝飾點點 */
-        .dot {
-            position: absolute;
-            background: rgba(255, 255, 255, 0.5);
-            border-radius: 50%;
-            z-index: -1;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>TJC 大溪教會 🚗 公務車快速回報系統</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Microsoft JhengHei", sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+  </style>
 </head>
-<body>
-    <!-- 裝飾背景 -->
-    <div class="dot" style="width: 100px; height: 100px; top: 10%; left: 5%;"></div>
-    <div class="dot" style="width: 80px; height: 80px; bottom: 15%; right: 10%;"></div>
+<body class="bg-slate-50 min-h-screen flex flex-col justify-between">
 
-    <div class="card">
-        <span class="icon">✨</span>
-        <h1>感謝主！</h1>
-        <p>願您所做的一切辛勞<br>皆蒙主親自紀念。</p>
-        <a href="#" onclick="window.close(); return false;" class="btn">完成回報</a>
+  <!-- 頂部教堂精美標頭 -->
+  <header class="bg-gradient-to-r from-blue-600 to-indigo-700 text-white py-6 px-4 shadow-md text-center relative">
+    <div class="absolute top-4 right-4">
+      <!-- 隱藏的設定齒輪（點擊可設定 Google 表單對接欄位） -->
+      <button onclick="toggleSettings()" class="text-white/70 hover:text-white transition-all text-xl">
+        <i class="fa-solid fa-gear"></i>
+      </button>
+    </div>
+    <div class="flex justify-center items-center gap-2 mb-1">
+      <span class="bg-white/20 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider">
+        TJC 真耶穌教會
+      </span>
+    </div>
+    <h1 class="text-2xl font-bold tracking-tight">大溪教會公務車回報</h1>
+    <p class="text-xs text-blue-100 mt-1">「你出你入，耶和華要保護你，從今時直到永遠。」（詩 121:8）</p>
+  </header>
+
+  <!-- 主容器 -->
+  <main class="max-w-md w-full mx-auto px-4 py-6 flex-grow">
+    
+    <!-- 1. 設定提示區（僅在未設定 Google 表單時顯示） -->
+    <div id="setup-banner" class="hidden mb-6 bg-amber-50 border-l-4 border-amber-500 p-4 rounded-r-lg shadow-sm">
+      <div class="flex gap-2">
+        <i class="fa-solid fa-triangle-exclamation text-amber-500 text-lg mt-0.5"></i>
+        <div>
+          <h4 class="font-bold text-amber-800 text-sm">尚未與您的 Google 表單綁定</h4>
+          <p class="text-xs text-amber-700 mt-1">請點擊右上角 <i class="fa-solid fa-gear"></i> 設定按鈕，輸入您的表單連結與 Entry ID 即可一鍵對接！</p>
+        </div>
+      </div>
     </div>
 
-    <script>
-        // 簡單的活潑背景裝飾生成
-        for(let i=0; i<15; i++) {
-            let dot = document.createElement('div');
-            dot.className = 'dot';
-            let size = Math.random() * 50 + 10;
-            dot.style.width = size + 'px';
-            dot.style.height = size + 'px';
-            dot.style.top = Math.random() * 100 + '%';
-            dot.style.left = Math.random() * 100 + '%';
-            document.body.appendChild(dot);
-        }
-    </script>
+    <!-- 2. 主表單畫面 -->
+    <form id="car-form" onsubmit="submitForm(event)" class="space-y-6">
+      
+      <!-- 第一步：回報類別 (單選按鈕卡片) -->
+      <div class="bg-white p-5 rounded-2xl shadow-sm space-y-3">
+        <label class="block text-sm font-bold text-slate-700">
+          <span class="text-red-500 mr-1">*</span>1. 請問您今天是「出車」還是「歸還」？
+        </label>
+        <div class="grid grid-cols-2 gap-3">
+          <!-- 出車按鈕 -->
+          <label class="relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-slate-200 cursor-pointer hover:bg-emerald-50/30 transition-all text-center select-none" id="type-out-label">
+            <input type="radio" name="reportType" value="出車到達" class="sr-only" required onclick="selectType('out')">
+            <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mb-2 text-xl">
+              <i class="fa-solid fa-car-side"></i>
+            </div>
+            <span class="font-bold text-slate-800 text-sm">出車到達</span>
+            <span class="text-[10px] text-slate-400 mt-0.5">出發時填寫</span>
+            <div class="absolute top-2 right-2 w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs text-white" id="type-out-check"></div>
+          </label>
+          <!-- 歸還按鈕 -->
+          <label class="relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-slate-200 cursor-pointer hover:bg-blue-50/30 transition-all text-center select-none" id="type-in-label">
+            <input type="radio" name="reportType" value="回程歸還" class="sr-only" required onclick="selectType('in')">
+            <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mb-2 text-xl">
+              <i class="fa-solid fa-square-check"></i>
+            </div>
+            <span class="font-bold text-slate-800 text-sm">回程歸還</span>
+            <span class="text-[10px] text-slate-400 mt-0.5">回到教會填寫</span>
+            <div class="absolute top-2 right-2 w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs text-white" id="type-in-check"></div>
+          </label>
+        </div>
+      </div>
+
+      <!-- 第二步：選擇駕駛員 (頭像按鈕格線) -->
+      <div class="bg-white p-5 rounded-2xl shadow-sm space-y-3">
+        <label class="block text-sm font-bold text-slate-700">
+          <span class="text-red-500 mr-1">*</span>2. 駕駛員姓名
+        </label>
+        <div class="grid grid-cols-3 gap-2" id="driver-grid">
+          <!-- 預設常用名單 -->
+          <button type="button" onclick="selectDriver('楊忠生')" class="driver-btn py-3 px-2 rounded-xl border border-slate-200 font-medium text-slate-700 text-sm hover:bg-slate-50 transition-all text-center select-none">
+            楊忠生
+          </button>
+          <button type="button" onclick="selectDriver('張弟兄')" class="driver-btn py-3 px-2 rounded-xl border border-slate-200 font-medium text-slate-700 text-sm hover:bg-slate-50 transition-all text-center select-none">
+            張弟兄
+          </button>
+          <button type="button" onclick="selectDriver('李姊妹')" class="driver-btn py-3 px-2 rounded-xl border border-slate-200 font-medium text-slate-700 text-sm hover:bg-slate-50 transition-all text-center select-none">
+            李姊妹
+          </button>
+          <button type="button" onclick="selectDriver('王傳道')" class="driver-btn py-3 px-2 rounded-xl border border-slate-200 font-medium text-slate-700 text-sm hover:bg-slate-50 transition-all text-center select-none">
+            王傳道
+          </button>
+          <!-- 其他選項 -->
+          <button type="button" onclick="selectDriver('other')" id="driver-other-btn" class="driver-btn py-3 px-2 rounded-xl border border-slate-200 font-medium text-slate-500 text-sm hover:bg-slate-50 transition-all text-center select-none flex items-center justify-center gap-1">
+            <i class="fa-solid fa-pen text-xs"></i> 其他同工
+          </button>
+        </div>
+        <!-- 隱藏的駕駛姓名實體 Input -->
+        <input type="hidden" id="driver-value" name="driverName" required>
+        <!-- 其他同工手動輸入框 -->
+        <div id="other-driver-container" class="hidden mt-2">
+          <input type="text" id="driver-other-input" oninput="updateOtherDriver(this.value)" placeholder="請輸入同工姓名..." class="w-full px-4 py-3 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+        </div>
+      </div>
+
+      <!-- 第三步：目前里程數 -->
+      <div class="bg-white p-5 rounded-2xl shadow-sm space-y-3">
+        <label for="mileage" class="block text-sm font-bold text-slate-700">
+          <span class="text-red-500 mr-1">*</span>3. 目前里程數
+        </label>
+        <div class="relative rounded-xl shadow-sm">
+          <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400">
+            <i class="fa-solid fa-gauge"></i>
+          </div>
+          <input type="number" id="mileage" name="mileage" required min="1" step="1" inputmode="numeric" placeholder="請輸入儀表板顯示數字" class="w-full pl-10 pr-12 py-3.5 rounded-xl border border-slate-200 font-bold text-lg text-slate-800 placeholder:text-slate-400 placeholder:font-normal focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+          <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none text-slate-400 font-semibold text-sm">
+            KM
+          </div>
+        </div>
+      </div>
+
+      <!-- 第四步：里程表照片 (高畫質壓縮方案) -->
+      <div class="bg-white p-5 rounded-2xl shadow-sm space-y-3">
+        <label class="block text-sm font-bold text-slate-700">
+          <span class="text-red-500 mr-1">*</span>4. 上傳里程表照片
+        </label>
+        
+        <!-- 相機拍照啟動區 -->
+        <div class="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-2xl p-6 bg-slate-50/50 cursor-pointer hover:bg-slate-100/40 transition-all relative overflow-hidden" id="photo-box" onclick="triggerCamera()">
+          <input type="file" id="camera-input" accept="image/*" capture="environment" class="hidden" onchange="processPhoto(this)">
+          
+          <!-- 未拍照狀態 -->
+          <div id="photo-placeholder" class="text-center space-y-2">
+            <div class="w-14 h-14 bg-white shadow-sm rounded-full flex items-center justify-center text-blue-500 text-2xl mx-auto border border-slate-100">
+              <i class="fa-solid fa-camera"></i>
+            </div>
+            <div class="font-bold text-slate-700 text-sm">點擊啟動相機拍照</div>
+            <p class="text-xs text-slate-400">拍照會自動進行安全壓縮，免登入上傳</p>
+          </div>
+
+          <!-- 已拍照預覽狀態 -->
+          <div id="photo-preview-container" class="hidden w-full relative">
+            <img id="photo-preview" class="w-full h-48 object-cover rounded-xl shadow-sm" src="" alt="照片預覽">
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center rounded-xl opacity-0 hover:opacity-100 transition-all">
+              <span class="text-white text-xs font-semibold bg-black/60 px-3 py-1.5 rounded-full">
+                <i class="fa-solid fa-arrows-rotate mr-1"></i> 重新拍照
+              </span>
+            </div>
+          </div>
+        </div>
+        <!-- 儲存壓縮後 Base64 圖片內容的隱藏輸入框 -->
+        <input type="hidden" id="photo-base64" name="photoBase64" required>
+      </div>
+
+      <!-- 第五步：目的地 / 備註 -->
+      <div class="bg-white p-5 rounded-2xl shadow-sm space-y-3">
+        <label for="destination" class="block text-sm font-bold text-slate-700">
+          5. 目的地 / 備註
+        </label>
+        <div class="relative rounded-xl shadow-sm">
+          <div class="absolute top-3.5 left-0 pl-4 flex items-start pointer-events-none text-slate-400">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <input type="text" id="destination" name="destination" placeholder="例如：林口教會、大溪教會..." class="w-full pl-10 pr-4 py-3 rounded-xl border border-slate-200 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all">
+        </div>
+      </div>
+
+      <!-- 送出按鈕 -->
+      <div class="pt-2">
+        <button type="submit" id="submit-btn" class="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-700 text-white font-bold rounded-2xl shadow-lg shadow-indigo-200 hover:shadow-xl hover:shadow-indigo-300 active:scale-[0.98] transition-all flex items-center justify-center gap-2 text-lg">
+          <i class="fa-solid fa-paper-plane"></i> 確認送出，平安回報！
+        </button>
+      </div>
+
+    </form>
+
+    <!-- 3. 送出中 Loading 遮罩 -->
+    <div id="loading-overlay" class="hidden bg-white/95 backdrop-blur-sm p-8 rounded-2xl shadow-xl text-center space-y-4 my-12 py-16">
+      <div class="relative w-16 h-16 mx-auto">
+        <div class="absolute inset-0 rounded-full border-4 border-slate-100"></div>
+        <div class="absolute inset-0 rounded-full border-4 border-blue-600 border-t-transparent animate-spin"></div>
+      </div>
+      <h3 class="text-lg font-bold text-slate-800">正在傳送回報資料...</h3>
+      <p class="text-xs text-slate-400">請保持網路暢通，約需要 3-5 秒時間</p>
+    </div>
+
+    <!-- 4. 感謝主成功畫面 -->
+    <div id="success-screen" class="hidden bg-white p-8 rounded-2xl shadow-xl text-center space-y-6 my-6 border border-emerald-100">
+      <div class="w-20 h-20 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center text-4xl mx-auto shadow-inner animate-bounce">
+        <i class="fa-solid fa-dove"></i>
+      </div>
+      <div class="space-y-2">
+        <h2 class="text-2xl font-black text-emerald-600">感謝主！回報成功 🕊️</h2>
+        <p class="text-sm font-semibold text-slate-600" id="success-time-text"></p>
+        <p class="text-xs text-slate-400">已將公務車使用紀錄平安寫入 Google 試算表！</p>
+      </div>
+
+      <!-- 剛才填寫的卡片預覽 -->
+      <div class="bg-slate-50 p-4 rounded-xl text-left text-sm space-y-2 border border-slate-100">
+        <div class="flex justify-between border-b border-slate-200/60 pb-2">
+          <span class="text-slate-400">回報類別：</span>
+          <span class="font-bold text-slate-800" id="preview-type">-</span>
+        </div>
+        <div class="flex justify-between border-b border-slate-200/60 pb-2">
+          <span class="text-slate-400">駕駛人員：</span>
+          <span class="font-bold text-slate-800" id="preview-driver">-</span>
+        </div>
+        <div class="flex justify-between border-b border-slate-200/60 pb-2">
+          <span class="text-slate-400">儀表里程：</span>
+          <span class="font-bold text-slate-800" id="preview-mileage">- KM</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-slate-400">目的地點：</span>
+          <span class="font-bold text-slate-800" id="preview-destination">-</span>
+        </div>
+      </div>
+
+      <button onclick="resetForm()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl transition-all text-sm">
+        <i class="fa-solid fa-arrow-rotate-left mr-1"></i> 再填一筆紀錄
+      </button>
+    </div>
+
+    <!-- 5. 彈出式對接設定視窗 (Modal) -->
+    <div id="settings-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+      <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl space-y-4 max-h-[90vh] overflow-y-auto">
+        <div class="flex justify-between items-center border-b pb-3">
+          <h3 class="font-black text-slate-800 text-lg">⚙️ Google 表單對接設定</h3>
+          <button onclick="toggleSettings()" class="text-slate-400 hover:text-slate-600 text-xl">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <p class="text-xs text-slate-500 leading-relaxed">
+          我們將資料傳送到 Google 表單來達成永久免費、免登入。請在下方填入您的表單資料：
+        </p>
+        
+        <div class="space-y-3 text-sm">
+          <!-- Form Action URL -->
+          <div class="space-y-1">
+            <label class="block font-bold text-slate-700">Google Form Action 網址</label>
+            <input type="text" id="cfg-form-url" placeholder="https://docs.google.com/forms/d/e/.../formResponse" class="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <!-- Entry ID 1 -->
+          <div class="space-y-1">
+            <label class="block font-bold text-slate-700">1. 回報類別 Entry ID</label>
+            <input type="text" id="cfg-entry-type" placeholder="entry.XXXXXXXX" class="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <!-- Entry ID 2 -->
+          <div class="space-y-1">
+            <label class="block font-bold text-slate-700">2. 駕駛姓名 Entry ID</label>
+            <input type="text" id="cfg-entry-driver" placeholder="entry.XXXXXXXX" class="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <!-- Entry ID 3 -->
+          <div class="space-y-1">
+            <label class="block font-bold text-slate-700">3. 目前里程 Entry ID</label>
+            <input type="text" id="cfg-entry-mileage" placeholder="entry.XXXXXXXX" class="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <!-- Entry ID 4 -->
+          <div class="space-y-1">
+            <label class="block font-bold text-slate-700">4. 里程照片(Base64) Entry ID</label>
+            <input type="text" id="cfg-entry-photo" placeholder="entry.XXXXXXXX" class="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+          <!-- Entry ID 5 -->
+          <div class="space-y-1">
+            <label class="block font-bold text-slate-700">5. 目的地 Entry ID</label>
+            <input type="text" id="cfg-entry-dest" placeholder="entry.XXXXXXXX" class="w-full px-3 py-2 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button onclick="saveSettings()" class="flex-grow py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl text-sm shadow-md">
+            儲存設定
+          </button>
+          <button onclick="toggleSettings()" class="py-3 px-4 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold rounded-xl text-sm">
+            取消
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- 底部版權 -->
+  <footer class="bg-slate-100 py-4 text-center border-t border-slate-200 text-[10px] text-slate-400">
+    真耶穌教會大溪教會 © 2026 
+  </footer>
+
+  <script>
+    // 預設配置設定（亦可透過 UI 的設定面板動態儲存至 localStorage）
+    const CONFIG = {
+      formUrl: '',
+      entryType: '',
+      entryDriver: '',
+      entryMileage: '',
+      entryPhoto: '',
+      entryDest: ''
+    };
+
+    // 頁面初始化
+    window.onload = function() {
+      loadSettings();
+      checkSetupState();
+    };
+
+    // 載入 localStorage 設定值
+    function loadSettings() {
+      CONFIG.formUrl = localStorage.getItem('tjc_formUrl') || '';
+      CONFIG.entryType = localStorage.getItem('tjc_entryType') || '';
+      CONFIG.entryDriver = localStorage.getItem('tjc_entryDriver') || '';
+      CONFIG.entryMileage = localStorage.getItem('tjc_entryMileage') || '';
+      CONFIG.entryPhoto = localStorage.getItem('tjc_entryPhoto') || '';
+      CONFIG.entryDest = localStorage.getItem('tjc_entryDest') || '';
+
+      // 同步到設定畫面 Input 中
+      document.getElementById('cfg-form-url').value = CONFIG.formUrl;
+      document.getElementById('cfg-entry-type').value = CONFIG.entryType;
+      document.getElementById('cfg-entry-driver').value = CONFIG.entryDriver;
+      document.getElementById('cfg-entry-mileage').value = CONFIG.entryMileage;
+      document.getElementById('cfg-entry-photo').value = CONFIG.entryPhoto;
+      document.getElementById('cfg-entry-dest').value = CONFIG.entryDest;
+    }
+
+    // 檢查是否已設定對接
+    function checkSetupState() {
+      const banner = document.getElementById('setup-banner');
+      if (!CONFIG.formUrl || !CONFIG.entryType || !CONFIG.entryDriver || !CONFIG.entryMileage || !CONFIG.entryPhoto) {
+        banner.classList.remove('hidden');
+      } else {
+        banner.classList.add('hidden');
+      }
+    }
+
+    // 開啟/關閉設定視窗
+    function toggleSettings() {
+      const modal = document.getElementById('settings-modal');
+      modal.classList.toggle('hidden');
+    }
+
+    // 儲存設定
+    function saveSettings() {
+      const url = document.getElementById('cfg-form-url').value.trim();
+      const entryType = document.getElementById('cfg-entry-type').value.trim();
+      const entryDriver = document.getElementById('cfg-entry-driver').value.trim();
+      const entryMileage = document.getElementById('cfg-entry-mileage').value.trim();
+      const entryPhoto = document.getElementById('cfg-entry-photo').value.trim();
+      const entryDest = document.getElementById('cfg-entry-dest').value.trim();
+
+      localStorage.setItem('tjc_formUrl', url);
+      localStorage.setItem('tjc_entryType', entryType);
+      localStorage.setItem('tjc_entryDriver', entryDriver);
+      localStorage.setItem('tjc_entryMileage', entryMileage);
+      localStorage.setItem('tjc_entryPhoto', entryPhoto);
+      localStorage.setItem('tjc_entryDest', entryDest);
+
+      loadSettings();
+      checkSetupState();
+      toggleSettings();
+    }
+
+    // 處理出車/歸還選擇
+    function selectType(type) {
+      const outLabel = document.getElementById('type-out-label');
+      const inLabel = document.getElementById('type-in-label');
+      const outCheck = document.getElementById('type-out-check');
+      const inCheck = document.getElementById('type-in-check');
+      const destInput = document.getElementById('destination');
+
+      if (type === 'out') {
+        outLabel.className = "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-emerald-500 bg-emerald-50/20 cursor-pointer text-center select-none shadow-sm transition-all";
+        inLabel.className = "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-slate-200 cursor-pointer hover:bg-slate-50 transition-all text-center select-none";
+        
+        outCheck.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i>';
+        outCheck.className = "absolute top-2 right-2 w-5 h-5 rounded-full bg-emerald-500 border border-emerald-500 flex items-center justify-center text-xs text-white";
+        inCheck.innerHTML = '';
+        inCheck.className = "absolute top-2 right-2 w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs text-white";
+        
+        destInput.value = ''; // 出車預設不填目的地
+      } else {
+        inLabel.className = "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-blue-500 bg-blue-50/20 cursor-pointer text-center select-none shadow-sm transition-all";
+        outLabel.className = "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-slate-200 cursor-pointer hover:bg-slate-50 transition-all text-center select-none";
+        
+        inCheck.innerHTML = '<i class="fa-solid fa-check text-[10px]"></i>';
+        inCheck.className = "absolute top-2 right-2 w-5 h-5 rounded-full bg-blue-500 border border-blue-500 flex items-center justify-center text-xs text-white";
+        outCheck.innerHTML = '';
+        outCheck.className = "absolute top-2 right-2 w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs text-white";
+        
+        destInput.value = '大溪教會'; // 回程預設為大溪教會
+      }
+    }
+
+    // 處理駕駛員選擇
+    function selectDriver(name) {
+      const buttons = document.querySelectorAll('.driver-btn');
+      buttons.forEach(btn => {
+        btn.classList.remove('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
+        btn.classList.add('border-slate-200', 'text-slate-700', 'hover:bg-slate-50');
+      });
+
+      const otherContainer = document.getElementById('other-driver-container');
+      const otherInput = document.getElementById('driver-other-input');
+
+      if (name === 'other') {
+        const otherBtn = document.getElementById('driver-other-btn');
+        otherBtn.classList.remove('border-slate-200', 'text-slate-500');
+        otherBtn.classList.add('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
+        otherContainer.classList.remove('hidden');
+        otherInput.focus();
+        document.getElementById('driver-value').value = otherInput.value;
+      } else {
+        // 點擊具體的名字按鈕
+        event.target.classList.remove('border-slate-200', 'text-slate-700');
+        event.target.classList.add('bg-blue-600', 'text-white', 'border-blue-600', 'shadow-sm');
+        otherContainer.classList.add('hidden');
+        document.getElementById('driver-value').value = name;
+      }
+    }
+
+    // 更新手動輸入的其他同工名字
+    function updateOtherDriver(val) {
+      document.getElementById('driver-value').value = val;
+    }
+
+    // 觸發原生相機
+    function triggerCamera() {
+      document.getElementById('camera-input').click();
+    }
+
+    // 處理相機拍照與「超高壓縮比」Base64 算法 (確保順利塞入 Google 表單中，圖片不會太大而報錯)
+    function processPhoto(input) {
+      if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onload = function() {
+            // 使用 canvas 將圖片等比例縮小至寬度 400px (儀表板照片完全足夠看清)
+            const canvas = document.createElement('canvas');
+            const max_size = 400;
+            let width = img.width;
+            let height = img.height;
+
+            if (width > height) {
+              if (width > max_size) {
+                height *= max_size / width;
+                width = max_size;
+              }
+            } else {
+              if (height > max_size) {
+                width *= max_size / height;
+                height = max_size;
+              }
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+
+            // 以高壓縮率(0.6)轉為 JPEG 格式 Base64，檔案僅約 10 ~ 20 KB
+            const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+            // 更新預覽
+            document.getElementById('photo-preview').src = compressedBase64;
+            document.getElementById('photo-placeholder').classList.add('hidden');
+            document.getElementById('photo-preview-container').classList.remove('hidden');
+
+            // 儲存至隱藏欄位
+            document.getElementById('photo-base64').value = compressedBase64;
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(input.files[0]);
+      }
+    }
+
+    // 送出表單到 Google Form (核心無 CORS 報錯送出代碼)
+    function submitForm(event) {
+      event.preventDefault();
+
+      if (!CONFIG.formUrl || !CONFIG.entryType || !CONFIG.entryDriver || !CONFIG.entryMileage || !CONFIG.entryPhoto) {
+        alert('請先點擊右上角設定齒輪，設定您的 Google 表單對接資料！');
+        toggleSettings();
+        return;
+      }
+
+      const form = document.getElementById('car-form');
+      const loading = document.getElementById('loading-overlay');
+      const success = document.getElementById('success-screen');
+
+      // 取得填寫數值
+      const type = form.reportType.value;
+      const driver = document.getElementById('driver-value').value;
+      const mileage = document.getElementById('mileage').value;
+      const photo = document.getElementById('photo-base64').value;
+      const destination = document.getElementById('destination').value || '未備註';
+
+      if (!driver) {
+        alert('請先選擇或輸入駕駛員姓名！');
+        return;
+      }
+
+      if (!photo) {
+        alert('請拍照上傳里程表照片！');
+        return;
+      }
+
+      // 進入 Loading 狀態
+      form.classList.add('hidden');
+      loading.classList.remove('hidden');
+
+      // 封裝表單資料
+      const formData = new FormData();
+      formData.append(CONFIG.entryType, type);
+      formData.append(CONFIG.entryDriver, driver);
+      formData.append(CONFIG.entryMileage, mileage);
+      formData.append(CONFIG.entryPhoto, photo);
+      formData.append(CONFIG.entryDest, destination);
+
+      // 使用 mode: 'no-cors' 進行非同步表單直接傳送
+      fetch(CONFIG.formUrl, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: formData
+      })
+      .then(() => {
+        // 更新成功畫面上的資訊
+        document.getElementById('preview-type').innerText = type;
+        document.getElementById('preview-driver').innerText = driver;
+        document.getElementById('preview-mileage').innerText = mileage + " KM";
+        document.getElementById('preview-destination').innerText = destination;
+
+        const now = new Date();
+        document.getElementById('success-time-text').innerText = `${now.getMonth() + 1}/${now.getDate()} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')} 登記完成`;
+
+        // 顯示成功畫面
+        loading.classList.add('hidden');
+        success.classList.remove('hidden');
+      })
+      .catch((error) => {
+        alert('傳送失敗，請確認網路是否正常，或檢查設定連結是否正確。');
+        form.classList.remove('hidden');
+        loading.classList.add('hidden');
+      });
+    }
+
+    // 重置並重新填寫
+    function resetForm() {
+      const form = document.getElementById('car-form');
+      form.reset();
+
+      // 重置自訂選擇與相片欄位
+      document.getElementById('driver-value').value = '';
+      document.getElementById('photo-base64').value = '';
+      document.getElementById('camera-input').value = '';
+      
+      const buttons = document.querySelectorAll('.driver-btn');
+      buttons.forEach(btn => {
+        btn.className = "driver-btn py-3 px-2 rounded-xl border border-slate-200 font-medium text-slate-700 text-sm hover:bg-slate-50 transition-all text-center select-none";
+      });
+
+      document.getElementById('type-out-check').innerHTML = '';
+      document.getElementById('type-out-check').className = "absolute top-2 right-2 w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs text-white";
+      document.getElementById('type-in-check').innerHTML = '';
+      document.getElementById('type-in-check').className = "absolute top-2 right-2 w-5 h-5 rounded-full border border-slate-300 flex items-center justify-center text-xs text-white";
+      document.getElementById('type-out-label').className = "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-slate-200 cursor-pointer hover:bg-slate-50 transition-all text-center select-none";
+      document.getElementById('type-in-label').className = "relative flex flex-col items-center justify-center p-4 rounded-xl border-2 border-slate-200 cursor-pointer hover:bg-slate-50 transition-all text-center select-none";
+
+      document.getElementById('other-driver-container').classList.add('hidden');
+      document.getElementById('photo-placeholder').classList.remove('hidden');
+      document.getElementById('photo-preview-container').classList.add('hidden');
+
+      document.getElementById('success-screen').classList.add('hidden');
+      form.classList.remove('hidden');
+    }
+  </script>
 </body>
 </html>
+
+```
