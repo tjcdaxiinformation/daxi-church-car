@@ -64,12 +64,19 @@
             <!-- 2. 駕駛員姓名 -->
             <div>
                 <label class="block text-sm font-bold text-amber-900 mb-2">2. 駕駛員姓名 <span class="text-red-500">*</span></label>
-                <!-- 快捷按鈕 -->
-                <div class="grid grid-cols-4 gap-2 mb-2">
+                <!-- 快捷按鈕 (9位同工更新版，使用3直欄自適應排版) -->
+                <div class="grid grid-cols-3 gap-2 mb-2">
+                    <button type="button" onclick="selectDriver('駐牧傳道')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">駐牧傳道</button>
+                    <button type="button" onclick="selectDriver('陳微慎執事')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-[11px] font-semibold bg-gray-50 hover:bg-amber-50 truncate" title="陳微慎執事">陳微慎執事</button>
+                    <button type="button" onclick="selectDriver('鍾霖恩執事')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-[11px] font-semibold bg-gray-50 hover:bg-amber-50 truncate" title="鍾霖恩執事">鍾霖恩執事</button>
+                    
+                    <button type="button" onclick="selectDriver('王鴻志')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">王鴻志</button>
+                    <button type="button" onclick="selectDriver('胡明光')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">胡明光</button>
+                    <button type="button" onclick="selectDriver('高孝偉')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">高孝偉</button>
+                    
+                    <button type="button" onclick="selectDriver('張鴻霖')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">張鴻霖</button>
                     <button type="button" onclick="selectDriver('楊忠生')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">楊忠生</button>
-                    <button type="button" onclick="selectDriver('張弟兄')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">張弟兄</button>
-                    <button type="button" onclick="selectDriver('李姊妹')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">李姊妹</button>
-                    <button type="button" onclick="selectDriver('王傳道')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">王傳道</button>
+                    <button type="button" onclick="selectDriver('梁秀娟')" class="driver-badge py-2 px-1 border border-gray-200 rounded-xl text-xs font-semibold bg-gray-50 hover:bg-amber-50">梁秀娟</button>
                 </div>
                 <!-- 自訂輸入 -->
                 <input type="text" id="driverInput" placeholder="或點擊上方快速選取/手動輸入姓名..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 focus:outline-none text-sm" required>
@@ -116,10 +123,14 @@
                 <input type="text" id="destinationInput" placeholder="例如：大溪教會、信徒探訪、總會..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 focus:outline-none text-sm">
             </div>
 
-            <!-- GPS 狀態顯示 -->
-            <div class="flex items-center justify-between text-xs text-gray-400 px-1">
-                <span id="gpsStatus"><i class="fa-solid fa-location-crosshairs mr-1"></i> 正在取得目前定位...</span>
-                <span id="gpsCoords" class="font-mono text-[10px]"></span>
+            <!-- GPS 狀態顯示與問題診斷 -->
+            <div class="bg-amber-50 rounded-2xl p-3 border border-amber-100 space-y-1">
+                <div class="flex items-center justify-between text-xs text-gray-600">
+                    <span id="gpsStatus" class="font-semibold text-amber-800">
+                        <i class="fa-solid fa-location-crosshairs mr-1 animate-pulse"></i> 正在取得目前定位...
+                    </span>
+                    <span id="gpsCoords" class="font-mono text-[10px]"></span>
+                </div>
             </div>
 
             <!-- 提交按鈕 -->
@@ -130,9 +141,9 @@
         </form>
     </div>
 
-    <!-- 頁尾宣告 -->
+    <!-- 頁尾宣告更新 -->
     <div class="mt-6 text-center text-xs text-amber-800 opacity-60">
-        大溪教會公務車數位事工 © 2026
+        大溪教會資訊股車管組 ＠ 2026
     </div>
 
     <!-- ===== 設定 API 網址的模態視窗 (Modal) ===== -->
@@ -147,6 +158,29 @@
                     <button onclick="toggleModal(false)" class="flex-1 py-2 px-4 bg-gray-100 text-gray-700 rounded-xl text-xs font-bold hover:bg-gray-200 transition">取消</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- ===== GPS 錯誤原因詳細說明模態視窗 (Modal) ===== -->
+    <div id="gpsReasonModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl border border-rose-100">
+            <h3 id="gpsReasonTitle" class="text-base font-bold text-rose-900 mb-2"></h3>
+            <div id="gpsReasonDesc" class="text-xs text-gray-600 leading-relaxed mb-6 space-y-2"></div>
+            <button onclick="closeGpsReason()" class="w-full py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-2xl text-xs font-bold transition">
+                我知道了，重新整理網頁
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== 自訂漂亮警告視窗 (替代原生 alert) ===== -->
+    <div id="customAlertModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-white rounded-3xl max-w-xs w-full p-6 shadow-2xl border border-amber-100 text-center">
+            <span class="text-4xl block mb-3">⚠️</span>
+            <h4 id="alertTitle" class="text-md font-bold text-amber-900 mb-2">提醒您</h4>
+            <p id="alertMessage" class="text-xs text-gray-500 leading-relaxed mb-5"></p>
+            <button onclick="closeCustomAlert()" class="w-full py-3 bg-amber-500 hover:bg-amber-600 text-white rounded-2xl text-xs font-bold shadow transition">
+                確定
+            </button>
         </div>
     </div>
 
@@ -173,8 +207,8 @@
     </div>
 
     <script>
-        // 【網頁開發設定】如果您想要一次設定好，不再讓同工手動輸入，可以把 API 網址填在這裡：
-        const HARDCODED_GAS_URL = "https://script.google.com/macros/s/AKfycbzz7-I33WaxciDwmLO1QHk0GXgHh2JcwXdTVOifgq6W5yQfDt2-tHC-mScXjbzDXok1/exec"; 
+        // 【一勞永逸免改設定】如果您想一次設定好，請把在 Google Apps Script 部署取得的 API 網址填入下方雙引號中：
+        const HARDCODED_GAS_URL = ""; 
 
         let selectedType = "";
         let base64Photo = "";
@@ -203,6 +237,17 @@
             };
         }
 
+        // 自訂警告提示框
+        function showCustomAlert(title, message) {
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertMessage').textContent = message;
+            document.getElementById('customAlertModal').classList.remove('hidden');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').classList.add('hidden');
+        }
+
         // 取得 API 網址
         function getGasUrl() {
             if (HARDCODED_GAS_URL) return HARDCODED_GAS_URL;
@@ -228,6 +273,7 @@
                 localStorage.setItem('gas_url', url);
                 document.getElementById('apiAlert').classList.add('hidden');
                 toggleModal(false);
+                getGPSLocation(); // 重新觸發定位
             } else {
                 localStorage.removeItem('gas_url');
                 document.getElementById('apiAlert').classList.remove('hidden');
@@ -245,7 +291,7 @@
             if (type === '出車到達') {
                 btnGo.classList.add('active-btn');
                 btnBack.classList.remove('active-btn');
-                if (!destInput.value) destInput.value = "";
+                if (destInput.value === "大溪教會") destInput.value = "";
             } else {
                 btnBack.classList.add('active-btn');
                 btnGo.classList.remove('active-btn');
@@ -273,7 +319,7 @@
             document.getElementById('cameraInput').click();
         }
 
-        // 處理照片預覽，並使用 canvas 自動高強度壓縮（避免 Base64 太大）
+        // 處理照片預覽，並使用 canvas 自動高強度壓縮（避免 Base64 太大導致上傳失敗）
         function previewImage(input) {
             if (input.files && input.files[0]) {
                 const file = input.files[0];
@@ -283,11 +329,10 @@
                     const img = new Image();
                     img.src = e.target.result;
                     img.onload = function() {
-                        // 建立 Canvas 來壓縮圖片 (最寬限制為 800px)
                         const canvas = document.createElement('canvas');
                         let width = img.width;
                         let height = img.height;
-                        const maxWidth = 800;
+                        const maxWidth = 800; // 壓縮最大寬度限制在 800px
 
                         if (width > maxWidth) {
                             height = Math.round((height * maxWidth) / width);
@@ -300,7 +345,7 @@
                         const ctx = canvas.getContext('2d');
                         ctx.drawImage(img, 0, 0, width, height);
 
-                        // 壓縮為 jpeg，品質 0.7
+                        // 壓縮為 jpeg，品質 0.7（大幅減少檔案大小，秒速傳輸）
                         base64Photo = canvas.toDataURL('image/jpeg', 0.7);
                         
                         // 顯示預覽
@@ -321,10 +366,21 @@
             document.getElementById('photoPreviewContainer').classList.add('hidden');
         }
 
-        // 取得 GPS 座標
+        // 取得 GPS 座標 & 深度解析未啟用原因
         function getGPSLocation() {
             const gpsStatus = document.getElementById('gpsStatus');
             const gpsCoords = document.getElementById('gpsCoords');
+
+            // 安全連線檢查 (HTTPS 限制)
+            const isHttps = window.location.protocol === 'https:';
+            const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+            if (!isHttps && !isLocalhost) {
+                gpsStatus.innerHTML = `<span class="text-rose-600 font-bold cursor-pointer" onclick="showGpsReason('https')"><i class="fa-solid fa-triangle-exclamation animate-pulse"></i> GPS未啟用 (安全限制) <u>原因?</u></span>`;
+                gpsCoords.textContent = "請改用安全連線";
+                gpsData = "無GPS (網頁非HTTPS安全加密連線)";
+                return;
+            }
 
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
@@ -336,40 +392,91 @@
                         gpsCoords.textContent = gpsData;
                     },
                     function(error) {
-                        gpsStatus.innerHTML = `<span class="text-amber-600"><i class="fa-solid fa-triangle-exclamation"></i> GPS定位未啟用</span>`;
-                        gpsCoords.textContent = "無定位";
-                        gpsData = "無GPS定位資料";
+                        let reason = "unknown";
+                        let reasonText = "原因未明";
+                        
+                        if (error.code === error.PERMISSION_DENIED) {
+                            reason = "denied";
+                            reasonText = "使用者拒絕授權";
+                        } else if (error.code === error.POSITION_UNAVAILABLE) {
+                            reason = "unavailable";
+                            reasonText = "位置資訊不可用";
+                        } else if (error.code === error.TIMEOUT) {
+                            reason = "timeout";
+                            reasonText = "偵測超時";
+                        }
+                        
+                        gpsStatus.innerHTML = `<span class="text-amber-600 font-bold cursor-pointer" onclick="showGpsReason('${reason}')"><i class="fa-solid fa-circle-question mr-1"></i> GPS定位未啟用 (<u>點擊看原因/教學</u>)</span>`;
+                        gpsCoords.textContent = reasonText;
+                        gpsData = `定位未啟用 (${reasonText})`;
                     },
-                    { enableHighAccuracy: true, timeout: 5000, maximumAge: 0 }
+                    { enableHighAccuracy: true, timeout: 8000, maximumAge: 0 }
                 );
             } else {
-                gpsStatus.innerHTML = `<span class="text-gray-400">裝置不支援GPS</span>`;
-                gpsData = "裝置不支援GPS";
+                gpsStatus.innerHTML = `<span class="text-gray-500 cursor-pointer" onclick="showGpsReason('notsupported')"><i class="fa-solid fa-triangle-exclamation"></i> 瀏覽器不支援GPS</span>`;
+                gpsData = "瀏覽器不支援GPS技術";
             }
+        }
+
+        // 動態說明 GPS 未開啟原因
+        function showGpsReason(code) {
+            let title = "";
+            let desc = "";
+
+            if (code === 'https') {
+                title = "🌐 瀏覽器安全防護限制";
+                desc = "<b>【網頁未啟用加密連線 (HTTPS)】</b><br>因為保護使用者隱私，Apple 和 Google 官方規定，所有非加密網址（開頭為 http://）皆被瀏覽器<b>強制關閉</b>取得定位功能。<br><br><b>🔧 解決方法：</b><br>請將本 HTML 託管於支援 <b>HTTPS</b> 的服務上（例如您目前使用的 GitHub Pages，網址皆為 <u>https://</u> 開頭，即可自動排除此限制！）。";
+            } else if (code === 'denied') {
+                title = "🔒 您拒絕了定位授權";
+                desc = "<b>【手機或瀏覽器拒絕分享位置】</b><br>在您第一次或之前開啟網頁時，手機跳出了「是否允許此網頁使用您的位置」，您不小心點選了「拒絕」。<br><br><b>🔧 簡單解鎖步驟：</b><br><b>👉 Android / Chrome：</b><br>1. 點擊網址列左側的<b>「鎖頭 🔒」</b>或「設定」圖示。<br>2. 找到<b>「位置資訊」</b>或<b>「Permissions」</b>。<br>3. 將其改為<b>「允許」</b>，並重新整理網頁。<br><br><b>👉 iPhone / Safari：</b><br>1. 開啟手機的「設定」-> 往下滑找到「Safari」。<br>2. 找到「位置（Location）」改為「詢問」或「允許」。<br>3. 重新整理網頁即可！";
+            } else if (code === 'unavailable') {
+                title = "🛰️ 衛星訊號無法取得";
+                desc = "<b>【位置訊號中斷】</b><br>手機的定位接收器無法鎖定衛星訊號。這通常發生在：<br>1. 您目前正在<b>地下室、室內深處</b>或有大量鋼筋高樓擋住處。<br>2. 手機行動網路收訊不良。<br><br><b>🔧 解決方法：</b><br>請前往窗戶邊或戶外開闊地點，然後按重新整理網頁再試一次！";
+            } else if (code === 'timeout') {
+                title = "⏳ 定位逾時 (Timeout)";
+                desc = "<b>【讀取超過時間限制】</b><br>瀏覽器等候了 8 秒鐘，手機的定位接收模組仍未提供經緯度資料。<br><br><b>🔧 解決方法：</b><br>請確認手機頂部的通知列中，<b>「定位/GPS」開關確實已經打開</b>，並重新整理網頁！";
+            } else if (code === 'notsupported') {
+                title = "💻 裝置或軟體不支援";
+                desc = "<b>【舊版瀏覽器限制】</b><br>您的瀏覽器太舊了，不支援現代 HTML5 地理定位功能。<br><br><b>🔧 解決方法：</b><br>建議使用 <b>Google Chrome</b> 或 <b>Safari</b> 瀏覽器開啟此回報系統。";
+            }
+
+            document.getElementById('gpsReasonTitle').innerHTML = title;
+            document.getElementById('gpsReasonDesc').innerHTML = desc;
+            document.getElementById('gpsReasonModal').classList.remove('hidden');
+        }
+
+        function closeGpsReason() {
+            document.getElementById('gpsReasonModal').classList.add('hidden');
+            getGPSLocation(); // 關閉後重新抓取
         }
 
         // 表單資料一鍵提交至 Google Apps Script Web App
         function submitData() {
             const gasUrl = getGasUrl();
             if (!gasUrl) {
-                alert("對不起，請先點擊右上角「齒輪 ⚙️」設定試算表後台的 API 網址！");
+                showCustomAlert("無法送出", "對不起，請先點擊右上角「齒輪 ⚙️」設定試算表後台的 API 網址！");
                 toggleModal(true);
                 return;
             }
 
             if (!selectedType) {
-                alert("請點選【1. 請問您今天是「出車」還是「歸還」】！");
+                showCustomAlert("未選擇", "請點選第一欄：您今天是「出車」還是「歸還」！");
                 return;
             }
 
             if (!base64Photo) {
-                alert("請拍照上傳【4. 里程表照片】以利教會記錄核對！");
+                showCustomAlert("缺少里程照片", "請拍攝目前公務車的【里程表照片】以供核對！");
                 return;
             }
 
             const driver = document.getElementById('driverInput').value.trim();
             const mileage = document.getElementById('mileageInput').value;
             const destination = document.getElementById('destinationInput').value.trim();
+
+            if (!driver) {
+                showCustomAlert("未輸入駕駛", "請點選或輸入駕駛員姓名！");
+                return;
+            }
 
             // 顯示載入遮罩
             document.getElementById('loadingOverlay').classList.remove('hidden');
@@ -386,26 +493,25 @@
             // 使用 fetch POST 發送 JSON 資料
             fetch(gasUrl, {
                 method: "POST",
-                mode: "no-cors", // 雲端硬碟防跨域最速模式
+                mode: "no-cors", // 繞過跨網域 CORS，快速穩定
                 cache: "no-cache",
                 headers: {
-                    "Content-Type": "text/plain" // 以純文字載體發送避免 CORS 阻擋
+                    "Content-Type": "text/plain"
                 },
                 body: JSON.stringify(payload)
             })
             .then(response => {
-                // 在 no-cors 模式下，雖然拿不到具體 JSON，但通常正常結束即代表成功
                 document.getElementById('loadingOverlay').classList.add('hidden');
-                // 彈出亮麗「感謝主」 modal
+                // 彈出成功「感謝主」畫面
                 document.getElementById('thankYouModal').classList.remove('hidden');
             })
             .catch(error => {
                 document.getElementById('loadingOverlay').classList.add('hidden');
-                alert("回報傳送失敗，請確認網路或聯絡資訊人員！錯誤：" + error);
+                showCustomAlert("連線錯誤", "資料傳送失敗，請確認手機網路，或點擊右上角齒輪重新設定網址！\n錯誤碼：" + error);
             });
         }
 
-        // 關閉成功感謝視窗並重置表單
+        // 關閉成功感謝視窗並自動清空欄位 (重置表單)
         function closeThankYou() {
             document.getElementById('thankYouModal').classList.add('hidden');
             
@@ -417,7 +523,7 @@
             document.getElementById('btnBack').classList.remove('active-btn');
             const badges = document.querySelectorAll('.driver-badge');
             badges.forEach(b => b.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-400'));
-            getGPSLocation();
+            getGPSLocation(); // 重設時再次讀取定位
         }
     </script>
 </body>
