@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TJC大溪教會 🚗 公務車快速回報</title>
+    <title>TJC大溪教會 🚗 公務車出入回報</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome 圖標 CDN -->
@@ -19,14 +19,16 @@
             color: #b45309 !important;
             box-shadow: 0 4px 12px rgba(245, 158, 11, 0.2);
         }
-        /* 徹底移除輸入框右側討人厭的上下調整微調按鈕 (Spinners) */
+        
+        /* 徹底移除與防堵輸入框右側討人厭的上下調整微調按鈕 (Spinners) */
         input::-webkit-outer-spin-button,
         input::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
+            -webkit-appearance: none !important;
+            margin: 0 !important;
         }
         input[type=number] {
-            -moz-appearance: textfield; /* Firefox 防呆 */
+            -moz-appearance: textfield !important; /* Firefox 防呆 */
+            appearance: textfield !important;
         }
     </style>
 </head>
@@ -95,6 +97,7 @@
             <div>
                 <label class="block text-sm font-bold text-amber-900 mb-1">3. 目前里程數 <span class="text-red-500">*</span></label>
                 <div class="relative rounded-xl shadow-sm">
+                    <!-- inputmode="numeric" 搭配 pattern="[0-9]*" 可完美引導手機彈出純大數字按鍵鍵盤 -->
                     <input type="number" id="mileageInput" pattern="[0-9]*" inputmode="numeric" placeholder="請填寫儀表板上的里程數..." class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-amber-400 focus:border-amber-400 focus:outline-none text-sm" required>
                     <div class="absolute inset-y-0 right-0 pr-4 flex items-center pointer-events-none">
                         <span class="text-gray-400 text-sm">km</span>
@@ -216,7 +219,7 @@
     </div>
 
     <script>
-        // 【一勞永逸免改設定】如果您想一次設定好，請把在 Google Apps Script 部署取得的 API 網址填入下方雙引號中：
+        // 【一勞永逸免改設定】您部署取得的 Google Apps Script API 網址已完美填入此處：
         const HARDCODED_GAS_URL = "https://script.google.com/macros/s/AKfycbzRQY0mRnlDb6Z8jOJLw5R6kJSHqIAcyR0CLDS4Cf-_q3fXo7JULMTcn6Z2qXnhOaFe/exec"; 
 
         let selectedType = "";
@@ -253,6 +256,7 @@
             document.getElementById('customAlertModal').classList.remove('hidden');
         }
 
+        // 關閉自訂警告提示框
         function closeCustomAlert() {
             document.getElementById('customAlertModal').classList.add('hidden');
         }
@@ -437,7 +441,7 @@
                 desc = "<b>【網頁未啟用加密連線 (HTTPS)】</b><br>因為保護使用者隱私，Apple 和 Google 官方規定，所有非加密網址（開頭為 http://）皆被瀏覽器<b>強制關閉</b>取得定位功能。<br><br><b>🔧 解決方法：</b><br>請將本 HTML 託管於支援 <b>HTTPS</b> 的服務上（例如您目前使用的 GitHub Pages，網址皆為 <u>https://</u> 開頭，即可自動排除此限制！）。";
             } else if (code === 'denied') {
                 title = "🔒 您拒絕了定位授權";
-                desc = "<b>【手機或瀏覽器拒絕分享位置】</b><br>在您第一次或之前開啟網頁時，手機跳出了「是否允許此網頁使用您的位置」，您不小心點選了「拒絕」。<br><br><b>🔧 簡單解鎖步驟：</b><br><b>👉 Android / Chrome：</b><br>1. 點擊網址列左側的<b>「鎖頭 🔒」</b>或「設定」圖示。<br>2. 找到<b>「位置資訊」</b>或<b>「Permissions」</b>。<br>3. 將其改為<b>「允許」</b>，並重新整理網頁。<br><br><b>👉 iPhone / Safari：</b><br>1. 開啟手機的「設定」-> 往下滑找到「Safari」。<br>2. 找到「位置（Location）」改為「詢問」或「允許」。<br>3. 重新整理網頁即可！";
+                desc = "<b>【手機或瀏覽器拒絕分享位置】</b><br>在您第一次或之前開啟網頁時，手機跳出了「是否允許此網頁使用您的位置」，您不小心點選了「拒絕」。<br><br><b>🔧 簡單解鎖步驟：</b><br><b>👉 Android / Chrome：</b><br>1. 點擊網址列左側的<b>「鎖頭 🔒」</b>或「設定」圖示。<br>2. 找到<b>「位置資訊」</b>或<b>「Permissions」</b>。<br>3. 將其改為<b>「允許」</b>，並重新整理網頁。<br><br><b>👉 iPhone / Safari：</b><br>1. 開記手機的「設定」-> 往下滑找到「Safari」。<br>2. 找到「位置（Location）」改為「詢問」或「允許」。<br>3. 重新整理網頁即可！";
             } else if (code === 'unavailable') {
                 title = "🛰️ 衛星訊號無法取得";
                 desc = "<b>【位置訊號中斷】</b><br>手機的定位接收器無法鎖定衛星訊號。這通常發生在：<br>1. 您目前正在<b>地下室、室內深處</b>或有大量鋼筋高樓擋住處。<br>2. 手機行動網路收訊不良。<br><br><b>🔧 解決方法：</b><br>請前往窗戶邊或戶外開闊地點，然後按重新整理網頁再試一次！";
