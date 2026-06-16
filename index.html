@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TJC大溪教會 🚗 公務車出入回報</title>
+    <title>TJC大溪教會 🚗 公務車快速回報</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome 圖標 CDN -->
@@ -201,21 +201,6 @@
         <div class="w-16 h-16 border-4 border-t-amber-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin mb-4"></div>
         <p class="font-bold text-base">正在將里程數與照片寫入試算表...</p>
         <p class="text-xs text-gray-200 mt-1">請保持網路暢通，請勿關閉網頁</p>
-    </div>
-
-    <!-- ===== 「感謝主！」成功通知視窗 ===== -->
-    <div id="thankYouModal" class="fixed inset-0 bg-amber-50 z-50 flex flex-col items-center justify-center text-center p-6 hidden">
-        <div class="max-w-xs bg-white rounded-3xl p-8 border-2 border-amber-100 shadow-2xl relative">
-            <span class="text-6xl mb-4 block animate-bounce">✨</span>
-            <h2 class="text-2xl font-black text-amber-900 mb-3">感謝主！</h2>
-            <p class="text-amber-800 text-sm leading-relaxed mb-6">
-                願您今日所做的一切辛勞與擺上，皆蒙主親自紀念。<br>
-                行程一路上都有神的看顧與平安！
-            </p>
-            <button onclick="closeThankYou()" class="w-full py-3 bg-amber-500 text-white font-bold rounded-2xl shadow-lg hover:bg-amber-600 transition">
-                完成回報
-            </button>
-        </div>
     </div>
 
     <script>
@@ -515,28 +500,13 @@
             })
             .then(response => {
                 document.getElementById('loadingOverlay').classList.add('hidden');
-                // 彈出成功「感謝主」畫面
-                document.getElementById('thankYouModal').classList.remove('hidden');
+                // 直接轉跳到同目錄下的 thank_you_page.html 頁面
+                window.location.href = "thank_you_page.html";
             })
             .catch(error => {
                 document.getElementById('loadingOverlay').classList.add('hidden');
                 showCustomAlert("連線錯誤", "資料傳送失敗，請確認手機網路，或點擊右上角齒輪重新設定網址！\n錯誤碼：" + error);
             });
-        }
-
-        // 關閉成功感謝視窗並自動清空欄位 (重置表單)
-        function closeThankYou() {
-            document.getElementById('thankYouModal').classList.add('hidden');
-            
-            // 重置表單
-            document.getElementById('carReportForm').reset();
-            clearPhoto();
-            selectedType = "";
-            document.getElementById('btnGo').classList.remove('active-btn');
-            document.getElementById('btnBack').classList.remove('active-btn');
-            const badges = document.querySelectorAll('.driver-badge');
-            badges.forEach(b => b.classList.remove('bg-amber-100', 'text-amber-800', 'border-amber-400'));
-            getGPSLocation(); // 重設時再次讀取定位
         }
     </script>
 </body>
